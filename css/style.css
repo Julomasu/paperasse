@@ -322,3 +322,14 @@ input[type="number"] { font-variant-numeric: tabular-nums; }
   body { background: #fff; color: #000; }
   .enbref, .grand { background: #fff; color: #000; border: 1px solid #000; }
 }
+
+/* Pages légales */
+.legal { display: grid; gap: 36px; max-width: 760px; }
+.legal section { display: grid; gap: 12px; }
+.legal h2 { font-size: clamp(1.5rem, 2.8vw, 2rem); }
+.legal ul { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; }
+.legal p, .legal li { max-width: 70ch; }
+.encart { background: var(--bg-2); border-radius: var(--r); padding: 20px 22px; display: grid; gap: 8px; }
+.alerte-config { border-left: 6px solid var(--warn); }
+.pied-liens { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.pied-liens a { font-weight: 600; }

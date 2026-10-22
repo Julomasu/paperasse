@@ -15,7 +15,15 @@
   P.etat = charger();
   P.sauver = function () { try { localStorage.setItem(CLE, JSON.stringify(P.etat)); } catch (e) { /* idem */ } };
   P.pages = {};
-  P.CONFIG = { depot: "https://github.com/Julomasu/paperasse" };   // adresse du dépôt GitHub, pour « signaler une erreur » (laisser vide tant qu'il n'existe pas)
+  P.CONFIG = {
+    depot: "https://github.com/Julomasu/paperasse",   // adresse du dépôt GitHub, pour « signaler une erreur »
+    // Identité de l'éditeur, affichée dans les mentions légales. À renseigner avant de communiquer largement sur le site.
+    // Un éditeur non professionnel peut rester anonyme (loi du 21 juin 2004, art. 6-III-2) à condition de communiquer son identité à l'hébergeur ;
+    // un éditeur professionnel doit indiquer nom, adresse, e-mail et directeur de la publication. À faire valider pour ta situation précise.
+    editeur: { nom: "", statut: "", directeurPublication: "", contact: "", adresse: "" },
+    // Mesure d'audience sans cookie : code du compte GoatCounter (« monsite » pour monsite.goatcounter.com). Vide = aucun script chargé.
+    audience: { goatcounter: "" }
+  };
   P.VERIFIE = "octobre 2026";
 
   P.THEMES = [
@@ -115,6 +123,7 @@
     P.$$("[data-nav]").forEach(a => { const on = a.dataset.nav === actif; a.classList.toggle("actif", on); if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
     const h1 = P.$("h1", el);
     document.title = (h1 ? h1.textContent + " · " : "") + "Paperasse";
+    if (P.audience) P.audience.compter();
     if (!meme && !(r.page === "glossaire" && r.param)) { window.scrollTo(0, 0); el.focus({ preventScroll: true }); }
     fermerPlus();
   };
@@ -153,6 +162,7 @@
     });
     document.addEventListener("keydown", ev => { if (ev.key === "Escape") fermerPlus(); });
     window.addEventListener("hashchange", P.rendre);
+    if (P.audience) P.audience.init();
     P.rendre();
     if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol) && !/claude\.ai|claudeusercontent/.test(location.hostname)) {
       navigator.serviceWorker.register("sw.js").catch(() => {});
