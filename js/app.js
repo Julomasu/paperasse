@@ -15,7 +15,7 @@
   P.etat = charger();
   P.sauver = function () { try { localStorage.setItem(CLE, JSON.stringify(P.etat)); } catch (e) { /* idem */ } };
   P.pages = {};
-  P.CONFIG = { depot: "" };   // adresse du dépôt GitHub, pour « signaler une erreur » (laisser vide tant qu'il n'existe pas)
+  P.CONFIG = { depot: "https://github.com/Julomasu/paperasse" };   // adresse du dépôt GitHub, pour « signaler une erreur » (laisser vide tant qu'il n'existe pas)
   P.VERIFIE = "octobre 2026";
 
   P.THEMES = [
