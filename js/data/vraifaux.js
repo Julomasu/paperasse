@@ -1,0 +1,25 @@
+/* Vrai ou faux : idées reçues. Chaque explication s'appuie sur la source du guide indiqué. */
+P.VRAIFAUX = [
+  { q: "Un job étudiant est toujours imposable.", vrai: false, expl: "Jusqu'à **5 405 €** de salaires, un job d'étudiant de 25 ans ou moins n'est pas imposable (revenus 2025). Il faut tout de même le déclarer.", guide: "job-etudiant-impots" },
+  { q: "Mes parents doivent forcément me rattacher à leur déclaration.", vrai: false, expl: "Le **rattachement est un choix**, pas une obligation : tu peux déclarer seul·e, mais compare l'effet sur l'impôt de la famille et sur tes aides.", guide: "rattachement" },
+  { q: "Un stage de plus de 2 mois doit être gratifié.", vrai: true, expl: "Au-delà de **2 mois**, la gratification est obligatoire : **4,50 € par heure** minimum en 2026.", guide: "stage" },
+  { q: "Pour avoir droit au chômage, il faut avoir travaillé au moins 6 mois.", vrai: true, expl: "Il faut **130 jours ou 910 heures** de travail sur les 24 derniers mois, soit environ six mois, pas forcément consécutifs.", guide: "chomage-are" },
+  { q: "Les stages comptent dans le calcul des droits au chômage.", vrai: false, expl: "Les périodes de **stage et d'études ne comptent pas** comme du travail pour ouvrir un droit à l'ARE.", guide: "chomage-are" },
+  { q: "Si je démissionne, j'ai automatiquement droit au chômage.", vrai: false, expl: "En principe non : il faut un **motif légitime** ou un projet professionnel remplissant des conditions précises.", guide: "demission-fin-contrat" },
+  { q: "La carte d'identité d'un majeur est payante.", vrai: false, expl: "Elle est **gratuite**, sauf en cas de perte ou de vol (timbre fiscal de 25 €).", guide: "carte-identite-passeport" },
+  { q: "Un site qui me fait payer des frais de dossier pour un passeport est officiel.", vrai: false, expl: "Seuls les sites en **.gouv.fr** (ANTS, Service-Public) sont officiels. Le seul coût est le timbre fiscal.", guide: "arnaques" },
+  { q: "Je peux contester un paiement par carte non autorisé jusqu'à 13 mois après.", vrai: true, expl: "Tu as **13 mois** pour contester un paiement que tu n'as pas autorisé. Fais opposition tout de suite.", guide: "fraude-carte" },
+  { q: "La contraception est gratuite avant 26 ans.", vrai: true, expl: "La consultation et les contraceptifs remboursés sont pris en charge **à 100 %** pour les moins de 26 ans.", guide: "contraception-gratuite" },
+  { q: "Il faut une ordonnance pour se faire dépister des IST quand on a moins de 26 ans.", vrai: false, expl: "Depuis le 1ᵉʳ septembre 2024, le dépistage en laboratoire est **gratuit et sans ordonnance** avant 26 ans.", guide: "prevention-depistage" },
+  { q: "Un arrêt maladie doit être envoyé à l'employeur dans les 48 heures.", vrai: true, expl: "Tu as **48 heures** pour envoyer l'arrêt, même si le médecin l'a transmis en ligne.", guide: "arret-maladie" },
+  { q: "Le préavis pour quitter un logement vide est toujours de 3 mois.", vrai: false, expl: "Il est de **3 mois** en logement vide, mais d'**1 mois** en logement meublé, en zone tendue et dans certains cas.", guide: "preavis-logement" },
+  { q: "Visale est une caution payante.", vrai: false, expl: "Visale est **gratuite** pour les locataires de 30 ans et moins.", guide: "visale-garant" },
+  { q: "En colocation, je ne réponds que de ma part de loyer.", vrai: false, expl: "Avec une **clause de solidarité**, chaque colocataire peut être poursuivi pour la totalité des impayés.", guide: "colocation" },
+  { q: "Une micro-entreprise sans chiffre d'affaires n'a rien à déclarer.", vrai: false, expl: "Tu dois quand même déclarer **0 €** à l'Urssaf à chaque échéance.", guide: "declarer-urssaf" },
+  { q: "Une micro-entreprise paie la CFE dès sa première année.", vrai: false, expl: "**Aucune CFE** n'est due l'année de création. Elle arrive la deuxième année.", guide: "cfe-micro" },
+  { q: "Les boursiers doivent payer la CVEC.", vrai: false, expl: "Les boursiers en sont **exonérés**, mais ils doivent quand même obtenir l'attestation.", guide: "cvec" },
+  { q: "Je peux renvoyer un achat en ligne dans les 14 jours, sans donner de raison.", vrai: true, expl: "Tu as **au moins 14 jours** pour te rétracter, avec quelques exceptions (produits personnalisés, périssables…).", guide: "achat-ligne" },
+  { q: "Un étudiant étranger peut travailler 964 heures par an sans autorisation de travail.", vrai: true, expl: "Avec un titre étudiant, tu peux travailler jusqu'à **964 heures par an**.", guide: "job-etudiant-droits" },
+  { q: "Le service civique est un emploi salarié.", vrai: false, expl: "C'est un **engagement volontaire indemnisé** (619,83 € nets par mois), pas un contrat de travail.", guide: "service-civique" },
+  { q: "Les ventes d'occasion sur Vinted sont toujours imposables.", vrai: false, expl: "Vendre tes **objets personnels d'occasion** à un prix inférieur à leur prix d'achat n'est en général pas imposable. Revendre régulièrement pour gagner de l'argent, si.", guide: "plateformes-revenus" }
+];

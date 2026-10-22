@@ -48,11 +48,13 @@
       <section class="tete-theme" style="--c:var(--signal)">
         <div class="barre-theme"></div>
         <h1>Calculs rapides</h1>
-        <p class="chapo">Deux calculateurs bâtis sur les règles 2026 publiées par l'administration.</p>
+        <p class="chapo">Quatre calculateurs bâtis sur les règles 2026 publiées par l'administration.</p>
       </section>
       <section class="tuiles">
         <a class="tuile" style="--c:var(--t-entreprise)" href="#outil-micro"><div><h2>Micro-entreprise : combien je paie ?</h2><p>Cotisations, Acre, versement libératoire, plafonds et seuil de TVA.</p></div><div class="bas"><span>Calculer</span><span class="fleche" aria-hidden="true">→</span></div></a>
         <a class="tuile" style="--c:var(--t-impots)" href="#outil-job"><div><h2>Mon job est-il imposable ?</h2><p>Job étudiant, apprentissage, stage : la part exonérée et la part à déclarer.</p></div><div class="bas"><span>Calculer</span><span class="fleche" aria-hidden="true">→</span></div></a>
+        <a class="tuile" style="--c:var(--t-travail)" href="#outil-stage"><div><h2>Ma gratification de stage</h2><p>Le minimum légal pour ton stage, selon sa durée et tes heures.</p></div><div class="bas"><span>Calculer</span><span class="fleche" aria-hidden="true">→</span></div></a>
+        <a class="tuile" style="--c:var(--t-logement)" href="#outil-preavis"><div><h2>Mon préavis de logement</h2><p>La date de fin de ton préavis selon le type de location.</p></div><div class="bas"><span>Calculer</span><span class="fleche" aria-hidden="true">→</span></div></a>
       </section>`;
   };
 
@@ -161,9 +163,98 @@
     maj();
   }
 
+
+  /* Gratification de stage : 15 % du plafond horaire de la Sécurité sociale (30 € en 2026) = 4,50 € l'heure, due au-delà de 308 heures (2 mois). */
+  P.STAGE = { plafondHoraire: 30, taux: 0.15, seuilHeures: 308 };
+  P.calcStage = function ({ heuresSemaine, semaines }) {
+    const s = P.STAGE, total = heuresSemaine * semaines, horaire = s.plafondHoraire * s.taux;
+    const due = total > s.seuilHeures;
+    const montant = due ? total * horaire : 0;
+    const mois = semaines / 4.345;
+    return { total, horaire, due, montant, parMois: mois > 0 ? montant / mois : 0 };
+  };
+
+  function outilStage(el) {
+    const v = { heuresSemaine: 35, semaines: 12 };
+    el.innerHTML = `
+      <section class="tete-theme" style="--c:var(--t-travail)">
+        <p class="fil"><a href="#outils">← Calculs rapides</a></p>
+        <h1>Ma gratification de stage</h1>
+        <p class="chapo">Minimum légal 2026 : 15 % du plafond horaire de la Sécurité sociale, soit 4,50 € par heure de présence, dès que le stage dépasse 2 mois (308 heures).</p>
+      </section>
+      <div class="outil">
+        <form class="formulaire" onsubmit="return false">
+          <div class="champ"><label for="hs">Heures de présence par semaine</label><input id="hs" type="number" min="1" max="48" step="1" inputmode="numeric" value="${v.heuresSemaine}"></div>
+          <div class="champ"><label for="sem">Durée du stage, en semaines</label><input id="sem" type="number" min="1" max="52" step="1" inputmode="numeric" value="${v.semaines}"></div>
+          <p class="petit">Un stage de 6 mois maximum par année d'enseignement. Une convention collective ou ton entreprise peut prévoir plus que ce minimum.</p>
+        </form>
+        <div class="resultat" id="res" aria-live="polite"></div>
+      </div>`;
+    const maj = () => {
+      const r = P.calcStage({ heuresSemaine: Math.max(0, Number(P.$("#hs", el).value) || 0), semaines: Math.max(0, Number(P.$("#sem", el).value) || 0) });
+      P.$("#res", el).innerHTML = r.due ? `
+        <div class="grand"><span class="petit">Gratification minimale</span><span class="chiffre">${P.euros(r.montant)}</span><span class="petit">soit environ ${P.euros(r.parMois)} par mois, pour ${r.total} heures à ${r.horaire.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} € l'heure</span></div>
+        <div class="alerte info"><strong>Comment c'est versé</strong><span>La gratification est versée chaque mois, en fonction des heures réellement faites. Elle n'est pas soumise à cotisations dans la limite du minimum légal, et elle est exonérée d'impôt pour un stage obligatoire de ta formation (voir le guide « Job étudiant, stage »).</span></div>` : `
+        <div class="grand"><span class="petit">Gratification</span><span class="chiffre">Non obligatoire</span><span class="petit">${r.total} heures de présence : en dessous de 308 heures (2 mois), l'entreprise n'a pas l'obligation de te gratifier</span></div>
+        <div class="alerte warn"><strong>Pas obligatoire, mais possible</strong><span>Elle peut quand même te proposer une gratification : demande-le avant de signer la convention.</span></div>`;
+    };
+    el.oninput = maj; maj();
+  }
+
+  /* Préavis du locataire : 3 mois (logement vide), 1 mois (meublé, zone tendue ou motif légitime). Le délai court à partir de la réception du congé. */
+  P.calcPreavis = function ({ reception, meuble, tendue, motif }) {
+    const mois = (meuble || tendue || motif) ? 1 : 3;
+    const d = new Date(reception + "T12:00:00");
+    const fin = new Date(d); fin.setMonth(fin.getMonth() + mois);
+    if (fin.getDate() !== d.getDate()) fin.setDate(0);   // fin de mois plus courte
+    return { mois, fin };
+  };
+
+  function outilPreavis(el) {
+    const auj = new Date(), iso = d => d.toISOString().slice(0, 10);
+    el.innerHTML = `
+      <section class="tete-theme" style="--c:var(--t-logement)">
+        <p class="fil"><a href="#outils">← Calculs rapides</a></p>
+        <h1>Mon préavis de logement</h1>
+        <p class="chapo">Le préavis court à partir de la réception du congé par le propriétaire : 3 mois pour un logement vide, 1 mois dans les autres cas.</p>
+      </section>
+      <div class="outil">
+        <form class="formulaire" onsubmit="return false">
+          <div class="champ"><label for="rec">Date à laquelle le propriétaire reçoit ton congé</label><input id="rec" type="date" value="${iso(auj)}"></div>
+          <div class="champ"><span class="petit" style="font-weight:700">Type de logement</span><div class="seg-ligne" role="group" aria-label="Type"><button type="button" class="seg" data-m="0" aria-pressed="true">Vide (non meublé)</button><button type="button" class="seg" data-m="1" aria-pressed="false">Meublé</button></div></div>
+          <div class="champ"><span class="petit" style="font-weight:700">Zone tendue ?</span><div class="seg-ligne" role="group" aria-label="Zone tendue"><button type="button" class="seg" data-t="0" aria-pressed="true">Non</button><button type="button" class="seg" data-t="1" aria-pressed="false">Oui</button></div></div>
+          <div class="champ"><span class="petit" style="font-weight:700">Motif légitime de préavis réduit ?</span><div class="seg-ligne" role="group" aria-label="Motif"><button type="button" class="seg" data-o="0" aria-pressed="true">Non</button><button type="button" class="seg" data-o="1" aria-pressed="false">Oui</button></div></div>
+          <p class="petit">Zone tendue : la liste officielle des communes figure sur service-public.gouv.fr. Motifs légitimes : mutation, perte d'emploi, nouvel emploi après une perte d'emploi, état de santé, bénéficiaire du RSA ou de l'AAH, logement social obtenu, violences conjugales (à justifier).</p>
+        </form>
+        <div class="resultat" id="res" aria-live="polite"></div>
+      </div>`;
+    const v = { meuble: false, tendue: false, motif: false };
+    const maj = () => {
+      const rec = P.$("#rec", el).value;
+      if (!rec) { P.$("#res", el).innerHTML = `<p class="vide">Choisis une date.</p>`; return; }
+      const r = P.calcPreavis({ reception: rec, ...v });
+      P.$("#res", el).innerHTML = `
+        <div class="grand"><span class="petit">Ton préavis se termine le</span><span class="chiffre">${r.fin.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}</span><span class="petit">préavis de ${r.mois} mois à partir de la réception du congé</span></div>
+        <div class="alerte info"><strong>Jusqu'à cette date, le loyer reste dû</strong><span>Tu peux libérer le logement plus tôt, mais tu paies le loyer jusqu'à la fin du préavis, sauf si un nouveau locataire arrive avant (le propriétaire est alors d'accord).</span></div>
+        <p class="actions"><a class="btn" href="#lettre-preavis-logement">Écrire la lettre de congé</a><a class="btn btn-ligne" href="#guide-bail-etat-lieux">Le guide</a></p>`;
+    };
+    el.oninput = maj;
+    el.onclick = ev => {
+      const b = ev.target.closest(".seg"); if (!b) return;
+      if ("m" in b.dataset) v.meuble = b.dataset.m === "1";
+      if ("t" in b.dataset) v.tendue = b.dataset.t === "1";
+      if ("o" in b.dataset) v.motif = b.dataset.o === "1";
+      P.$$(".seg", b.parentElement).forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+      maj();
+    };
+    maj();
+  }
+
   P.pages.outil = function (el, id) {
     if (id === "micro") return outilMicro(el);
     if (id === "job") return outilJob(el);
+    if (id === "stage") return outilStage(el);
+    if (id === "preavis") return outilPreavis(el);
     location.hash = "#outils";
   };
 })();

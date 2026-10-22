@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Paperasse</title>
-<meta name="description" content="Paperasse explique l'administration française aux jeunes : première déclaration d'impôts, création d'entreprise, logement, CAF, santé, papiers d'identité. Gratuit, sans compte, vérifié sur les sources officielles.">
+<meta name="description" content="Paperasse explique l'administration française aux jeunes : impôts, travail, logement, santé, argent, papiers d'identité, droits et litiges. Plus de 80 guides pas à pas, une to-do personnalisée, des lettres types. Gratuit, sans compte, vérifié sur les sources officielles.">
 <meta name="theme-color" content="#131A33">
 <link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/style.css">
@@ -23,11 +23,11 @@
       <span>Paperasse</span>
     </a>
     <nav class="nav-haut" aria-label="Navigation principale">
-      <a href="#theme-impots" data-nav="impots">Impôts</a>
-      <a href="#theme-entreprise" data-nav="entreprise">Entreprise</a>
-      <a href="#theme-logement" data-nav="logement">Logement &amp; santé</a>
-      <a href="#theme-papiers" data-nav="papiers">Papiers</a>
+      <a href="#todo" data-nav="parcours">Mon parcours</a>
+      <a href="#guides" data-nav="guides">Guides</a>
       <a href="#outils" data-nav="outils">Outils</a>
+      <a href="#aides" data-nav="aides">Aides</a>
+      <a href="#glossaire" data-nav="reperes">Repères</a>
       <button type="button" class="nav-plus" data-ouvre-plus aria-expanded="false" aria-controls="plus">Plus</button>
     </nav>
   </div>
@@ -35,9 +35,11 @@
 
 <div class="plus" id="plus" hidden>
   <nav aria-label="Autres pages">
-    <a href="#suivi" data-nav="suivi"><strong>Mes démarches</strong><span>Ce que tu as déjà fait, et ce qui reste</span></a>
-    <a href="#glossaire" data-nav="glossaire"><strong>Le glossaire</strong><span>Le jargon administratif traduit</span></a>
-    <a href="#a-propos" data-nav="a-propos"><strong>Sources et limites</strong><span>D'où viennent les informations</span></a>
+    <a href="#numeros"><strong>Numéros utiles</strong><span>Urgences, santé, violences, arnaques</span></a>
+    <a href="#suivi"><strong>Mes démarches</strong><span>Ce que tu as déjà fait, et ce qui reste</span></a>
+    <a href="#a-propos"><strong>Sources et limites</strong><span>D'où viennent les informations</span></a>
+    <a href="#mentions"><strong>Mentions légales</strong><span>Éditeur, hébergeur, licences</span></a>
+    <a href="#confidentialite"><strong>Confidentialité</strong><span>Ce que le site garde</span></a>
   </nav>
   <div class="reglages" aria-label="Affichage">
     <p class="surtitre">Affichage</p>
@@ -54,20 +56,21 @@
   </div>
 </div>
 
+<div id="sous-nav" class="sous-nav-zone"></div>
 <main id="app" class="app" tabindex="-1"></main>
 
 <footer class="pied">
   <p><strong>Paperasse</strong> est un outil d'information indépendant, sans lien avec l'administration. Les chiffres sont ceux de 2026 et changent chaque année : chaque fiche indique sa date de vérification et ses sources. En cas de doute, c'est le site officiel qui fait foi.</p>
   <p class="petit">Tes cases cochées restent sur ton appareil : aucun compte, aucun traceur. Tu choisis ton orientation après le bac ? Essaie <a href="https://julomasu.github.io/aiguillage/" target="_blank" rel="noopener">Aiguillage</a>.</p>
-  <p class="petit pied-liens"><a href="#mentions">Mentions légales</a><a href="#confidentialite">Confidentialité</a><a href="#a-propos">Sources et limites</a></p>
+  <p class="petit pied-liens"><a href="#mentions">Mentions légales</a><a href="#confidentialite">Confidentialité</a><a href="#numeros">Numéros utiles</a><a href="#a-propos">Sources et limites</a></p>
 </footer>
 
 <nav class="onglets" aria-label="Navigation rapide">
   <a href="#accueil" data-nav="accueil"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/></svg>Accueil</a>
-  <a href="#theme-impots" data-nav="impots"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg>Impôts</a>
-  <a href="#theme-entreprise" data-nav="entreprise"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="8" width="16" height="11" rx="2"/><path d="M9 8V5h6v3"/></svg>Entreprise</a>
-  <a href="#theme-logement" data-nav="logement"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11z"/><path d="M10 20v-6h4v6"/></svg>Logement</a>
-  <a href="#theme-papiers" data-nav="papiers"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="9" cy="12" r="2"/><path d="M14 11h4M14 14h3"/></svg>Papiers</a>
+  <a href="#todo" data-nav="parcours"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4 10-10"/><path d="M5 20h14"/></svg>Parcours</a>
+  <a href="#guides" data-nav="guides"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg>Guides</a>
+  <a href="#outils" data-nav="outils"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h3M14 13h2M8 17h3M14 17h2"/></svg>Outils</a>
+  <a href="#aides" data-nav="aides"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M14.5 9.5c-.6-.8-1.5-1.2-2.5-1.2-1.4 0-2.5.8-2.5 2 0 3 5 1.4 5 4 0 1.2-1.2 2-2.5 2-1 0-2-.4-2.6-1.2M12 6.5v1.8M12 15.7v1.8"/></svg>Aides</a>
   <button type="button" data-ouvre-plus aria-expanded="false" aria-controls="plus"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/></svg>Plus</button>
 </nav>
 
@@ -77,13 +80,31 @@
 <script>window.P = {};</script>
 <script src="js/data/guides-impots.js"></script>
 <script src="js/data/guides-entreprise.js"></script>
+<script src="js/data/guides-travail.js"></script>
 <script src="js/data/guides-logement.js"></script>
+<script src="js/data/guides-sante.js"></script>
+<script src="js/data/guides-argent.js"></script>
 <script src="js/data/guides-papiers.js"></script>
+<script src="js/data/guides-droits.js"></script>
+<script src="js/data/guides-complements.js"></script>
+<script src="js/data/meta-guides.js"></script>
 <script src="js/data/glossaire.js"></script>
+<script src="js/data/glossaire-plus.js"></script>
+<script src="js/data/evenements.js"></script>
+<script src="js/data/documents.js"></script>
+<script src="js/data/contacts.js"></script>
+<script src="js/data/lettres.js"></script>
+<script src="js/data/aides.js"></script>
+<script src="js/data/calendrier.js"></script>
+<script src="js/data/vraifaux.js"></script>
+<script src="js/data/numeros.js"></script>
+<script src="js/data/todo.js"></script>
 <script src="js/app.js"></script>
 <script src="js/audience.js"></script>
 <script src="js/pages.js"></script>
+<script src="js/pages-parcours.js"></script>
 <script src="js/outils.js"></script>
+<script src="js/pages-ressources.js"></script>
 <script src="js/pages-legal.js"></script>
 <script>P.demarrer();</script>
 </body>

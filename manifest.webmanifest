@@ -1,7 +1,7 @@
 {
   "name": "Paperasse — l'administration expliquée aux jeunes",
   "short_name": "Paperasse",
-  "description": "Impôts, création d'entreprise, logement, CAF, santé, papiers : des guides pas à pas, vérifiés sur les sources officielles.",
+  "description": "Impôts, travail, logement, santé, argent, papiers, droits : plus de 80 guides pas à pas, une to-do personnalisée et des lettres types, vérifiés sur les sources officielles.",
   "lang": "fr",
   "start_url": "./#accueil",
   "scope": "./",
