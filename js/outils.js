@@ -46,13 +46,13 @@
   P.pages.outils = function (el) {
     el.innerHTML = `
       <section class="tete-theme" style="--c:var(--signal)">
-        <p class="surtitre">Ordres de grandeur, pas montants officiels</p>
+        <div class="barre-theme"></div>
         <h1>Calculs rapides</h1>
         <p class="chapo">Deux calculateurs bâtis sur les règles 2026 publiées par l'administration.</p>
       </section>
-      <section class="themes">
-        <a class="theme-carte" style="--c:var(--t-entreprise)" href="#outil-micro"><span class="th-ico" aria-hidden="true">🧮</span><h2>Micro-entreprise : combien je paie ?</h2><p>Cotisations, Acre, versement libératoire, plafonds de chiffre d'affaires et seuil de TVA.</p></a>
-        <a class="theme-carte" style="--c:var(--t-impots)" href="#outil-job"><span class="th-ico" aria-hidden="true">🧾</span><h2>Mon job est-il imposable ?</h2><p>Job étudiant, apprentissage, stage : la part exonérée et la part à déclarer.</p></a>
+      <section class="tuiles">
+        <a class="tuile" style="--c:var(--t-entreprise)" href="#outil-micro"><div><h2>Micro-entreprise : combien je paie ?</h2><p>Cotisations, Acre, versement libératoire, plafonds et seuil de TVA.</p></div><div class="bas"><span>Calculer</span><span class="fleche" aria-hidden="true">→</span></div></a>
+        <a class="tuile" style="--c:var(--t-impots)" href="#outil-job"><div><h2>Mon job est-il imposable ?</h2><p>Job étudiant, apprentissage, stage : la part exonérée et la part à déclarer.</p></div><div class="bas"><span>Calculer</span><span class="fleche" aria-hidden="true">→</span></div></a>
       </section>`;
   };
 

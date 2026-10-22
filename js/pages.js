@@ -24,12 +24,12 @@
 
   /* ——— Briques */
   function meta(g) {
-    return `<div class="meta"><span>⏱ ${e(g.temps)}</span><span>💶 ${e(g.cout)}</span></div>`;
+    return `<div class="meta"><span>${e(g.temps)}</span><span>${e(g.cout)}</span></div>`;
   }
   function carteGuide(g, avecAvancee) {
     const t = P.themeParId[g.theme], a = P.avancement(g);
     return `<a class="guide-carte" href="#guide-${g.id}" style="--c:${t.c}">
-      <span class="surtitre">${t.emoji} ${e(t.nom)}</span>
+      <span class="surtitre">${e(t.nom)}</span>
       <h3>${e(g.titre)}</h3>
       <p>${e(g.accroche)}</p>
       ${meta(g)}
@@ -42,38 +42,42 @@
     const sit = P.etat.situation && SITUATIONS.find(s => s.id === P.etat.situation);
     const rendreSituation = s => s ? `<div class="parcours-sit"><p class="surtitre">Dans cet ordre</p><ol>${s.guides.map(id => P.guideParId[id]).filter(Boolean).map(g => `<li><span><a href="#guide-${g.id}">${e(g.titre)}</a><br><span class="petit">${e(g.accroche)}</span></span></li>`).join("")}</ol></div>` : "";
     el.innerHTML = `
-      <section class="hero">
-        <p class="surtitre">L'administration, côté jeunes</p>
-        <h1>Impôts, entreprise, logement, papiers : <span class="surligne">enfin clair.</span></h1>
-        <p class="chapo">Des guides pas à pas, avec les chiffres officiels de 2026, pour tout ce qu'on ne t'a jamais appris. Gratuit, sans compte.</p>
+      <section class="plein hero"><div class="cadre">
+        <p class="surtitre">Impôts · Entreprise · Logement · Papiers</p>
+        <h1>L'admin, <em>enfin</em> claire.</h1>
+        <p class="chapo">Des guides pas à pas, avec les chiffres officiels de 2026, pour tout ce qu'on ne t'a jamais appris.</p>
         <div class="recherche">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
           <label class="sr" for="q">Rechercher</label>
-          <input id="q" type="search" placeholder="Ex. : Acre, APL, passeport…" autocomplete="off">
+          <input id="q" type="search" placeholder="Acre, APL, passeport, impôts…" autocomplete="off">
         </div>
         <div class="resultats" id="resultats" aria-live="polite"></div>
-      </section>
+      </div></section>
 
-      <section class="situations">
+      <section class="plein sit-bandeau"><div class="cadre">
         <h2>Où en es-tu ?</h2>
         <div class="chips" role="group" aria-label="Ta situation">${SITUATIONS.map(s => `<button type="button" class="chip" data-sit="${s.id}" aria-pressed="${P.etat.situation === s.id}">${e(s.nom)}</button>`).join("")}</div>
         <div id="sit-guides">${rendreSituation(sit)}</div>
+      </div></section>
+
+      <section class="tuiles" aria-label="Les quatre thèmes">
+        ${P.THEMES.map(t => `<a class="tuile" href="#theme-${t.id}" style="--c:${t.c}">
+          <span class="fond-chiffre" aria-hidden="true">${guidesDuTheme(t.id).length}</span>
+          <div><h2>${e(t.nom)}</h2><p>${e(t.desc)}</p></div>
+          <div class="bas"><span>${guidesDuTheme(t.id).length} guides</span><span class="fleche" aria-hidden="true">→</span></div>
+        </a>`).join("")}
       </section>
 
-      <section class="themes" aria-label="Les quatre grands thèmes">
-        ${P.THEMES.map(t => `<a class="theme-carte" href="#theme-${t.id}" style="--c:${t.c}"><span class="th-ico" aria-hidden="true">${t.emoji}</span><h2>${e(t.nom)}</h2><p>${e(t.desc)}</p><span class="th-n">${guidesDuTheme(t.id).length} guides</span></a>`).join("")}
+      <section>
+        <div class="titre-section"><h2>Les chiffres 2026</h2><span class="petit">Revalorisés chaque année. Source et date sur chaque guide.</span></div>
+        <div class="defile">${CHIFFRES.map(([n, txt, id]) => `<a class="chiffre-carte" href="#guide-${id}"><span class="chiffre">${e(n)}</span><p>${e(txt)}</p></a>`).join("")}</div>
       </section>
 
-      <section class="situations">
-        <h2>Les chiffres 2026 à connaître</h2>
-        <div class="themes">${CHIFFRES.map(([n, txt, id]) => `<a class="theme-carte" style="--c:var(--signal)" href="#guide-${id}"><span class="chiffre">${e(n)}</span><p>${e(txt)}</p></a>`).join("")}</div>
-        <p class="petit">Ces montants sont revalorisés chaque année. Chaque guide indique sa source officielle et sa date de vérification.</p>
-      </section>
-
-      <section class="situations">
-        <h2>Des calculs rapides</h2>
-        <div class="actions"><a class="btn btn-signal" href="#outil-micro">Combien je paie en micro-entreprise ?</a><a class="btn btn-ligne" href="#outil-job">Mon job est-il imposable ?</a></div>
-      </section>`;
+      <section class="plein appel"><div class="cadre">
+        <p class="surtitre">Calculs rapides</p>
+        <h2>Fais le calcul avant de te lancer.</h2>
+        <div class="actions"><a class="btn" href="#outil-micro">Combien je paie en micro-entreprise ?</a><a class="btn btn-ligne" href="#outil-job">Mon job est-il imposable ?</a></div>
+      </div></section>`;
 
     const q = P.$("#q", el), res = P.$("#resultats", el);
     q.addEventListener("input", () => {
@@ -97,7 +101,7 @@
     if (!t) { location.hash = "#accueil"; return; }
     el.innerHTML = `
       <section class="tete-theme" style="--c:${t.c}">
-        <p class="surtitre">${t.emoji} Thème</p>
+        <div class="barre-theme"></div>
         <h1>${e(t.nom)}</h1>
         <p class="chapo">${e(t.desc)}</p>
       </section>
@@ -120,30 +124,31 @@
       <div class="guide" style="--c:${t.c}">
         <article class="guide-corps">
           <header class="guide-tete">
-            <p class="fil"><a href="#theme-${t.id}">${t.emoji} ${e(t.nom)}</a></p>
-            <h1>${e(g.titre)}</h1>
+            <p class="fil"><a href="#theme-${t.id}">← ${e(t.nom)}</a></p>
+            <div class="barre-theme"></div>
+            <h1>${e(g.titre).replace(/ :/g, "&nbsp;:")}</h1>
             <p class="chapo">${e(g.accroche)}</p>
             ${meta(g)}
           </header>
           <section class="enbref"><h2>En bref</h2><ul>${g.enBref.map(x => `<li>${P.mdInline(x)}</li>`).join("")}</ul></section>
           ${g.outil ? `<p class="actions"><a class="btn btn-signal" href="#outil-${g.outil.id}">${e(g.outil.label)}</a></p>` : ""}
           <section>
-            <h2 style="margin-bottom:12px">Les étapes</h2>
+            <h2 class="section-titre">Les étapes</h2>
             <ol class="etapes">${g.etapes.map((s, i) => `
               <li class="etape${P.estFait(g.id, i) ? " fait" : ""}" id="e-${i}">
                 <input class="coche" type="checkbox" data-i="${i}" ${P.estFait(g.id, i) ? "checked" : ""} aria-label="Étape faite : ${e(s.t)}">
                 <div class="etape-corps"><h3>${e(s.t)}</h3>${P.md(s.d)}${s.lien ? `<p><a class="lien-fleche" href="${e(s.lien.url)}" target="_blank" rel="noopener">${e(s.lien.label)}</a></p>` : ""}</div>
               </li>`).join("")}</ol>
           </section>
-          ${g.pieges && g.pieges.length ? `<section class="pieges"><h2>Les pièges à éviter</h2><ul>${g.pieges.map(x => `<li>${P.mdInline(x)}</li>`).join("")}</ul></section>` : ""}
-          ${voir.length ? `<section><h2 style="margin-bottom:12px">Pour aller plus loin</h2><div class="liste-guides">${voir.map(v => carteGuide(v, false)).join("")}</div></section>` : ""}
+          ${g.pieges && g.pieges.length ? `<section class="pieges"><h2>À éviter</h2><ul>${g.pieges.map(x => `<li>${P.mdInline(x)}</li>`).join("")}</ul></section>` : ""}
+          ${voir.length ? `<section><h2 class="section-titre">Pour aller plus loin</h2><div class="liste-guides">${voir.map(v => carteGuide(v, false)).join("")}</div></section>` : ""}
         </article>
         <aside class="lateral" aria-label="Infos pratiques">
           <div class="bloc progression" id="prog">${rendreAvancee()}</div>
           <div class="bloc"><h3>Liens officiels</h3><ul>${g.liens.map(l => `<li><a class="lien-ext" href="${e(l.url)}" target="_blank" rel="noopener">${e(l.label)}</a></li>`).join("")}</ul></div>
           <div class="bloc verif"><strong>Vérifié en ${e(g.verifie || P.VERIFIE)}</strong><span>Sources :</span><ul>${g.sources.map(s => `<li>${e(s)}</li>`).join("")}</ul>
             ${P.CONFIG.depot ? `<span>Une règle a changé, une erreur ? <a href="${e(P.CONFIG.depot)}/issues" target="_blank" rel="noopener">Dis-le-nous</a>.</span>` : ""}</div>
-          <button type="button" class="btn btn-ligne" data-imprimer>Imprimer cette fiche</button>
+          ${/claude\.ai|claudeusercontent/.test(location.hostname) ? "" : `<button type="button" class="btn btn-ligne" data-imprimer>Imprimer cette fiche</button>`}
         </aside>
       </div>`;
     el.onclick = ev => { if (ev.target.closest("[data-imprimer]")) window.print(); };
@@ -164,18 +169,20 @@
     const enCours = commences.filter(g => !termines.includes(g));
     el.innerHTML = `
       <section class="tete-theme" style="--c:var(--signal)">
-        <p class="surtitre">Sur ton appareil uniquement</p>
+        <div class="barre-theme"></div>
         <h1>Mes démarches</h1>
         <p class="chapo">Les étapes que tu as cochées dans les guides apparaissent ici. Rien n'est envoyé nulle part.</p>
       </section>
       ${commences.length ? `
-        ${enCours.length ? `<section><h2 style="margin-bottom:12px">En cours</h2><div class="liste-guides">${enCours.map(g => carteGuide(g)).join("")}</div></section>` : ""}
-        ${termines.length ? `<section><h2 style="margin-bottom:12px">Terminées</h2><div class="liste-guides">${termines.map(g => carteGuide(g)).join("")}</div></section>` : ""}
+        ${enCours.length ? `<section><h2 class="section-titre">En cours</h2><div class="liste-guides">${enCours.map(g => carteGuide(g)).join("")}</div></section>` : ""}
+        ${termines.length ? `<section><h2 class="section-titre">Terminées</h2><div class="liste-guides">${termines.map(g => carteGuide(g)).join("")}</div></section>` : ""}
         <p class="actions"><button type="button" class="btn btn-ligne" data-effacer>Tout effacer</button></p>`
       : `<p class="vide">Tu n'as encore coché aucune étape. Choisis ta situation sur l'accueil, ouvre un guide et coche au fur et à mesure.</p><p class="actions"><a class="btn btn-signal" href="#accueil">Commencer</a></p>`}`;
     el.onclick = ev => {
-      if (!ev.target.closest("[data-effacer]")) return;
-      if (confirm("Effacer toutes les étapes cochées sur cet appareil ?")) { P.etat.faits = {}; P.sauver(); P.pages.suivi(el); }
+      const b = ev.target.closest("[data-effacer]"); if (!b) return;
+      // confirmation dans la page (les boîtes de dialogue du navigateur ne sont pas toujours disponibles)
+      if (!b.dataset.sur) { b.dataset.sur = "1"; b.textContent = "Confirmer : tout effacer"; return; }
+      P.etat.faits = {}; P.sauver(); P.pages.suivi(el);
     };
   };
 
@@ -184,7 +191,7 @@
     const liste = P.GLOSSAIRE.slice().sort((a, b) => a.terme.localeCompare(b.terme, "fr"));
     el.innerHTML = `
       <section class="tete-theme" style="--c:var(--signal)">
-        <p class="surtitre">Le jargon, traduit</p>
+        <div class="barre-theme"></div>
         <h1>Glossaire</h1>
         <p class="chapo">${liste.length} mots qu'on te sort sans jamais les expliquer.</p>
       </section>
@@ -196,7 +203,7 @@
   P.pages["a-propos"] = function (el) {
     el.innerHTML = `
       <section class="tete-theme" style="--c:var(--signal)">
-        <p class="surtitre">Transparence</p>
+        <div class="barre-theme"></div>
         <h1>Sources et limites</h1>
         <p class="chapo">Paperasse explique, il ne remplace ni l'administration ni un professionnel.</p>
       </section>
