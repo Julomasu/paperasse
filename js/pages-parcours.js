@@ -98,6 +98,40 @@
     dessiner();
   };
 
+  /* ——— Partir à l'étranger : choisir sa destination */
+  P.pages.destination = function (el, id) {
+    const D = P.DESTINATIONS || [];
+    const d = D.find(x => x.id === id);
+    const choix = D.map(x => `<a class="dest-bouton" href="#destination-${x.id}" aria-current="${x.id === id}"><strong>${e(x.court || x.nom)}</strong><span>${e(x.sous || "")}</span></a>`).join("");
+    if (id && !d) { location.hash = "#destination"; return; }
+    if (!d) {
+      el.innerHTML = `
+        ${P.tete("Partir à l'étranger", "Europe, Brexit, vacances-travail, études, stage, frontalier, retour en France : choisis ta destination, on te donne les démarches dans l'ordre.", "var(--t-etranger)")}
+        <section><div class="dest-choix">${choix}</div></section>
+        <section class="dest-avant">
+          <h2 class="section-titre">Dans tous les cas</h2>
+          <p>Avant de partir, passe par la <a href="#guide-partir-etranger-checklist">check-list complète</a> : projet, papiers, santé, banque, impôts, inscription au registre des Français établis hors de France.</p>
+          <p class="actions"><a class="btn btn-signal" href="#guide-partir-etranger-checklist">Ouvrir la check-list</a><a class="btn btn-ligne" href="#theme-etranger">Tous les guides « À l'étranger »</a></p>
+        </section>`;
+      return;
+    }
+    const guides = d.guides.map(i => P.guideParId[i]).filter(Boolean);
+    const bloc = (titre, l) => l && l.length ? `<div class="dest-bloc"><h3>${titre}</h3><ul>${l.map(x => `<li>${P.md(x).replace(/^<p>|<\/p>$/g, "")}</li>`).join("")}</ul></div>` : "";
+    el.innerHTML = `
+      <p class="fil"><a href="#destination">← Toutes les destinations</a></p>
+      ${P.tete(e(d.nom), e(d.accroche), "var(--t-etranger)")}
+      <section class="dest-fiche">
+        <div class="dest-choix">${choix}</div>
+        <div class="dest-bloc"><h3>L'essentiel</h3><ul>${d.essentiel.map(x => `<li>${P.md(x).replace(/^<p>|<\/p>$/g, "")}</li>`).join("")}</ul></div>
+        <div class="dest-grille">${bloc("Travailler", d.travail)}${bloc("Étudier ou faire un stage", d.etudes)}${bloc("Santé et Sécu", d.sante)}${bloc("Impôts", d.impots)}</div>
+      </section>
+      <section>
+        <h2 class="section-titre">Les guides à suivre</h2>
+        <ol class="chemin">${guides.map(g => { const t = P.themeParId[g.theme], a = P.avancement(g); return `<li style="--c:${t.c}"><a href="#guide-${g.id}"><span class="surtitre">${e(t.nom)} · ${e(g.temps)}</span><strong>${e(g.titre)}</strong><span class="petit">${e(g.accroche)}</span>${a.fait ? `<div class="avancee"><i style="width:${a.pct}%"></i></div>` : ""}</a></li>`; }).join("")}</ol>
+      </section>
+      <section><h2 class="section-titre">Sites officiels</h2><ul class="liste-simple">${d.liens.map(l => `<li><a class="lien-fleche" href="${e(l.url)}" target="_blank" rel="noopener">${e(l.label)}</a></li>`).join("")}</ul></section>`;
+  };
+
   /* ——— Situations de vie */
   P.pages.vie = function (el, id) {
     if (!id) {

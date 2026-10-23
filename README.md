@@ -1,7 +1,7 @@
 # Paperasse
 
 L'administration française expliquée aux jeunes : impôts, travail, logement, santé, argent, papiers d'identité, droits et litiges.
-Plus de 80 guides pas à pas, une to-do personnalisée, des lettres types, un annuaire « qui contacter », un calendrier admin et toutes les aides.
+Plus de 130 guides pas à pas (dont un thème « À l'étranger » : Europe, Brexit, PVT, États-Unis, Canada, frontalier, retour en France), une to-do personnalisée, des lettres types, un annuaire « qui contacter », un calendrier admin et toutes les aides.
 Site statique (HTML, CSS, JavaScript sans dépendance), gratuit, sans compte, sans traceur. Même famille visuelle qu'[Aiguillage](https://julomasu.github.io/aiguillage/).
 
 ## Lancer le site
@@ -14,7 +14,9 @@ python3 -m http.server 8000   # puis ouvrir http://localhost:8000
 
 | Fichier | Contenu |
 |---|---|
-| `js/data/guides-*.js` | Les guides, un fichier par thème (impôts, entreprise, travail, logement, santé, argent, papiers, droits) et `guides-complements.js` pour les ajouts |
+| `js/data/guides-*.js` | Les guides, un fichier par thème (impôts, entreprise, travail, logement, santé, argent, papiers, droits, à l'étranger, famille) ; `guides-complements.js` et `guides-plus.js` pour les ajouts |
+| `js/data/destinations.js` | Les destinations de la page « Partir à l'étranger » (UE, Suisse, Royaume-Uni, États-Unis, Canada, PVT, retour, venir en France) |
+| `js/data/ajouts.js` | Situations de vie, papiers, organismes, aides, lettres, calendrier, vrai/faux et glossaire des guides ajoutés |
 | `js/data/meta-guides.js` | Profil (`pour`), moment (`quand`), place dans la to-do (`todo`) et reclassement des premiers guides |
 | `js/data/todo.js` | Questions de la to-do et étiquettes associées |
 | `js/data/evenements.js` | Situations de vie (« J'ai 18 ans », « Je cherche un logement »…) |

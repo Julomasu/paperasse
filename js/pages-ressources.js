@@ -47,6 +47,11 @@
   P.pages.documents = function (el) {
     const cats = [...new Set(P.DOCUMENTS.map(d => d.cat))];
     const f = { cat: null, q: "" };
+    const pret = id => !!(P.etat.papiers && P.etat.papiers[id]);
+    const bilan = () => {
+      const n = P.DOCUMENTS.filter(d => pret(d.id)).length, tot = P.DOCUMENTS.length;
+      P.$("#bilan-p", el).innerHTML = `<strong>${n}/${tot}</strong> <span class="petit">papiers cochés « je l'ai »</span><div class="avancee"><i style="width:${Math.round(100 * n / tot)}%"></i></div>`;
+    };
     const dessiner = () => {
       const n = P.norm(f.q).split(/[^a-z0-9]+/).filter(Boolean);
       const l = P.DOCUMENTS.filter(d => (!f.cat || d.cat === f.cat) && n.every(m => P.norm(d.nom + " " + d.quoi + " " + (d.mots || []).join(" ")).includes(m)));
@@ -55,9 +60,10 @@
           <div><span class="surtitre">${e(d.cat)}</span><h3>${e(d.nom)}</h3><p>${e(d.quoi)}</p>
             ${d.pour ? `<p class="petit"><strong>On te le demande pour :</strong> ${e(d.pour)}</p>` : ""}</div>
           <dl class="doc-infos"><div><dt>Où ?</dt><dd>${liens(d.ou)}</dd></div><div><dt>Délai</dt><dd>${e(d.delai)}</dd></div><div><dt>Coût</dt><dd>${e(d.cout)}</dd></div></dl>
-          ${d.guide ? `<a class="lien-fleche" href="#guide-${d.guide}">Le guide</a>` : ""}
+          <div class="doc-pied">${d.guide ? `<a class="lien-fleche" href="#guide-${d.guide}">Le guide</a>` : ""}<label class="doc-pret"><input class="coche" type="checkbox" data-pret="${d.id}" ${pret(d.id) ? "checked" : ""}>Je l'ai</label></div>
         </article>`).join("") : `<p class="vide">Aucun papier ne correspond. Essaie un autre mot.</p>`;
       P.$("#nb-d", el).textContent = l.length + " papier" + (l.length > 1 ? "s" : "");
+      bilan();
       P.$$("[data-dc]", el).forEach(b => b.setAttribute("aria-pressed", String(b.dataset.dc === f.cat)));
     };
     el.innerHTML = `
@@ -66,9 +72,16 @@
         <div class="recherche recherche-claire"><label class="sr" for="qd">Chercher un papier</label><input id="qd" type="search" placeholder="Chercher un papier : acte de naissance, avis d'impôt…" autocomplete="off"></div>
         <div class="chips" role="group" aria-label="Catégorie">${cats.map(c => `<button type="button" class="chip" data-dc="${e(c)}" aria-pressed="false">${e(c)}</button>`).join("")}</div>
         <p class="petit" id="nb-d" aria-live="polite"></p>
+        <div class="bilan-papiers" id="bilan-p"></div>
       </section>
       <div id="liste-d" class="docs"></div>`;
     el.onclick = ev => { const c = ev.target.closest("[data-dc]"); if (!c) return; f.cat = f.cat === c.dataset.dc ? null : c.dataset.dc; dessiner(); };
+    el.onchange = ev => {
+      const c = ev.target.closest("[data-pret]"); if (!c) return;
+      P.etat.papiers = P.etat.papiers || {};
+      if (c.checked) P.etat.papiers[c.dataset.pret] = 1; else delete P.etat.papiers[c.dataset.pret];
+      P.sauver(); bilan();
+    };
     el.oninput = ev => { if (ev.target.id === "qd") { f.q = ev.target.value; dessiner(); } };
     dessiner();
   };

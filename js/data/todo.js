@@ -53,7 +53,11 @@ P.TODO_QUESTIONS = [
       { id: "entreprise", label: "Créer mon entreprise", tags: ["p-entreprise"] },
       { id: "permis", label: "Passer le permis de conduire", tags: ["p-permis"] },
       { id: "voiture", label: "Acheter un véhicule", tags: ["p-voiture", "p-permis"] },
-      { id: "etranger", label: "Partir à l'étranger", sous: "Voyage, études, stage", tags: ["p-etranger"] },
+      { id: "etranger", label: "Partir à l'étranger", sous: "Études, stage, travail, vacances-travail : on précise juste après", tags: ["p-etranger"] },
+      { id: "retour", label: "Rentrer en France après un séjour à l'étranger", tags: ["p-retour"] },
+      { id: "frontalier", label: "Travailler de l'autre côté de la frontière", sous: "Suisse, Luxembourg, Belgique, Allemagne…", tags: ["p-frontalier"] },
+      { id: "couple", label: "Me pacser ou me marier", tags: ["p-couple"] },
+      { id: "enfant", label: "Attendre ou accueillir un enfant", tags: ["p-enfant"] },
       { id: "asso", label: "Lancer une association", tags: ["p-asso"] },
       { id: "rien", label: "Rien de précis", tags: [] }
     ]
@@ -65,7 +69,21 @@ P.TODO_QUESTIONS = [
       { id: "sante", label: "Besoin d'un soutien pour ma santé", sous: "Santé mentale ou physique", tags: ["p-sante"] },
       { id: "victime", label: "Je suis victime de harcèlement, de violences ou d'une arnaque", tags: ["p-victime"] },
       { id: "dette", label: "J'ai des difficultés d'argent ou des dettes", tags: ["p-dette"] },
+      { id: "handicap", label: "Je suis en situation de handicap ou j'ai une maladie chronique", tags: ["handicap"] },
       { id: "aucune", label: "Aucune de ces situations", tags: [] }
+    ]
+  },
+  {
+    id: "destination", titre: "Si tu pars à l'étranger, c'est pour quoi et où ?", aide: "Facultatif : passe cette question si tu ne pars pas. Cela affiche les guides propres à ton projet.", multi: true,
+    options: [
+      { id: "ue", label: "Travailler ou chercher un emploi dans l'UE", sous: "Allemagne, Espagne, Belgique, Italie…", tags: ["p-etranger", "p-ue"] },
+      { id: "uk", label: "Royaume-Uni", sous: "Depuis le Brexit : ETA, visa", tags: ["p-etranger", "p-uk"] },
+      { id: "us", label: "États-Unis", tags: ["p-etranger", "p-us"] },
+      { id: "ca", label: "Canada", tags: ["p-etranger", "p-ca"] },
+      { id: "pvt", label: "Un an en vacances-travail (PVT)", sous: "Australie, Nouvelle-Zélande, Japon, Canada…", tags: ["p-etranger", "p-pvt"] },
+      { id: "etudes", label: "Études, échange ou stage à l'étranger", sous: "Erasmus+, aides à la mobilité", tags: ["p-etranger", "p-etudes-etranger"] },
+      { id: "monde", label: "Un autre pays", tags: ["p-etranger"] },
+      { id: "non", label: "Je ne pars pas à l'étranger", tags: [] }
     ]
   }
 ];

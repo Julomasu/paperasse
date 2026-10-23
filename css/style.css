@@ -26,6 +26,8 @@
   --t-sante: #D6246E;
   --t-argent: #8A6A00;
   --t-droits: #3D4A5C;
+  --t-etranger: #0F766E;
+  --t-famille: #8B5E3C;
   --f-titre: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
   --f-texte: "Barlow", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --zoom: 1;
@@ -535,3 +537,85 @@ h1, h2, h3 { overflow-wrap: break-word; hyphens: manual; }
 
 /* Champ de recherche clair sans loupe (guides, papiers, aides) */
 .recherche-claire input { padding-left: 22px; }
+
+/* ═══════════ Fluidité : recherche partout, reprise, étape suivante, départs à l'étranger ═══════════ */
+
+/* ——— Bouton de recherche dans l'en-tête */
+.btn-rech { display: inline-flex; align-items: center; gap: 8px; margin-left: 8px; padding: 9px 14px; border-radius: 999px; border: 1px solid var(--bg-3); background: var(--bg-2); color: var(--muted); font-size: .95rem; font-weight: 500; }
+.btn-rech:hover { border-color: var(--ink); color: var(--ink); }
+.btn-rech svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; flex: none; }
+.btn-rech kbd { font: inherit; font-size: .75rem; padding: 1px 7px; border-radius: 5px; border: 1px solid var(--bg-3); background: var(--bg); color: var(--muted); }
+
+/* ——— Palette de recherche (plein écran, accessible depuis toutes les pages) */
+body.palette-ouverte { overflow: hidden; }
+.palette { position: fixed; inset: 0; z-index: 80; display: grid; align-items: start; justify-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) 16px 16px; }
+.palette[hidden] { display: none; }
+.palette-fond { position: absolute; inset: 0; background: rgb(0 0 0 / .55); }
+.palette-boite { position: relative; width: min(720px, 100%); max-height: calc(100vh - 48px); margin-top: clamp(0px, 8vh, 90px); background: var(--bg); color: var(--ink); border-radius: 14px; box-shadow: 0 24px 80px rgb(0 0 0 / .4); display: grid; grid-template-rows: auto 1fr; overflow: hidden; }
+.palette-champ { position: relative; display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--rule); }
+.palette-champ svg { width: 22px; height: 22px; fill: none; stroke: var(--ink); stroke-width: 2.2; flex: none; }
+.palette-champ input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--ink); font: inherit; font-size: 1.15rem; padding: 8px 0; outline: none; }
+.palette-champ input::-webkit-search-cancel-button { display: none; }
+.palette-x { flex: none; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--bg-3); background: var(--bg-2); font-size: .78rem; color: var(--muted); }
+.palette-res { overflow: auto; padding: 16px; display: grid; gap: 12px; align-content: start; }
+.palette .res-ligne { background: var(--bg-2); color: var(--ink); }
+.palette .res-ligne:hover, .palette .res-ligne:focus-visible { background: var(--bg-3); }
+.palette .res-ligne .petit { color: var(--muted); }
+.palette .res-type { background: var(--ink); color: var(--bg); }
+
+/* ——— Reprendre / les plus demandés (accueil) */
+.reprise { display: grid; gap: 14px; }
+.reprise-liste { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.reprise-liste .guide-carte { padding: 18px 20px; }
+.populaires { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; }
+.populaires .surtitre { margin-right: 4px; }
+
+/* ——— Guide : étape suivante, actions rapides */
+.actions-rapides { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn-mini { padding: 9px 16px; font-size: .92rem; border-radius: 999px; border: 1px solid var(--muted); background: transparent; color: var(--ink); font-weight: 600; }
+.btn-mini:hover { border-color: var(--ink); }
+.btn-mini.plein-noir { background: var(--btn); color: var(--btn-ink); border-color: var(--btn); }
+.etape.suivante { outline: 3px solid var(--c, var(--accent)); outline-offset: -3px; }
+.etape.suivante .etape-corps h3::after { content: "À faire maintenant"; margin-left: 10px; font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: var(--c, var(--accent)); color: #fff; padding: 3px 9px; border-radius: 99px; vertical-align: middle; }
+.etape.flash { animation: flash 1.2s ease; }
+@keyframes flash { 0%, 100% { background: var(--bg-2); } 30% { background: color-mix(in srgb, var(--c, var(--accent)) 28%, var(--bg-2)); } }
+.ensuite { display: grid; gap: 10px; }
+.fin-guide { display: grid; gap: 12px; background: var(--bg-2); border-radius: var(--r); padding: 22px; border-left: 6px solid var(--c, var(--accent)); }
+.fin-guide h2 { font-size: 1.6rem; }
+
+/* ——— Partir à l'étranger : choix de la destination */
+.dest-choix { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+.dest-bouton { display: grid; gap: 4px; text-align: left; padding: 18px 20px; border-radius: var(--r); border: 2px solid var(--bg-3); background: var(--bg); }
+.dest-bouton strong { font-size: 1.1rem; }
+.dest-bouton span { color: var(--muted); font-size: .9rem; }
+.dest-bouton:hover { border-color: var(--muted); }
+.dest-bouton[aria-current="true"] { background: var(--t-etranger); border-color: var(--t-etranger); color: #fff; }
+.dest-bouton[aria-current="true"] span { color: #fff; opacity: .85; }
+.dest-fiche { display: grid; gap: 24px; }
+.dest-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+.dest-bloc { display: grid; align-content: start; gap: 8px; background: var(--bg-2); border-radius: var(--r); padding: 22px; border-top: 6px solid var(--t-etranger); }
+.dest-bloc h3 { font-size: 1.2rem; }
+.dest-bloc ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; }
+.dest-avant { display: grid; gap: 10px; }
+.chrono { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: ch2; }
+.chrono li { counter-increment: ch2; display: grid; grid-template-columns: 52px 1fr; gap: 14px; background: var(--bg-2); border-radius: var(--r); padding: 16px 20px; align-items: start; }
+.chrono li::before { content: counter(ch2); font-family: var(--f-titre); font-weight: 800; font-size: 2.2rem; line-height: .9; color: var(--t-etranger); }
+.chrono strong { display: block; }
+
+/* ——— Papiers : « je l'ai » */
+.doc-tete { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+.doc-pret { display: inline-flex; align-items: center; gap: 8px; font-size: .9rem; font-weight: 600; white-space: nowrap; cursor: pointer; margin: 0; }
+.doc-pret .coche { width: 26px; height: 26px; margin: 0; }
+.doc.pret { opacity: .62; }
+.doc.pret h3 { text-decoration: line-through; text-decoration-thickness: 1px; }
+.bilan-papiers { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.bilan-papiers .avancee { flex: 1 1 200px; max-width: 360px; }
+
+@media (max-width: 760px) {
+  .btn-rech span, .btn-rech kbd { display: none; }
+  .btn-rech { padding: 10px; margin-left: 0; }
+  .palette-boite { margin-top: 0; max-height: calc(100vh - 32px); }
+  .chrono li { grid-template-columns: 40px 1fr; padding: 14px 16px; }
+}
+.doc-pied { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.dest-bouton, .dest-bouton strong, .dest-bouton span { text-decoration: none; }

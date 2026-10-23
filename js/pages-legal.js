@@ -61,7 +61,7 @@
         </section>
         <section>
           <h2>Ce qui reste dans ton navigateur</h2>
-          <p>Pour fonctionner, le site enregistre sur ton appareil (stockage local du navigateur, qui n'est pas un cookie) : les étapes que tu as cochées dans les guides, les réponses à ton questionnaire « to-do » et les démarches que tu as cochées comme faites, tes réponses au « Vrai ou faux » et tes réglages d'affichage (thème, taille du texte). Ces données servent uniquement à te les ré-afficher. Les lettres types se remplissent dans ta page : ce que tu écris (nom, adresse…) n'est ni envoyé ni enregistré. Tu peux tout effacer dans « Mes démarches », bouton « Tout effacer », ou en vidant les données du site dans ton navigateur.</p>
+          <p>Pour fonctionner, le site enregistre sur ton appareil (stockage local du navigateur, qui n'est pas un cookie) : les étapes que tu as cochées dans les guides, les réponses à ton questionnaire « to-do » et les démarches que tu as cochées comme faites, les papiers que tu as cochés « je l'ai », les derniers guides que tu as ouverts, tes réponses au « Vrai ou faux » et tes réglages d'affichage (thème, taille du texte). Ces données servent uniquement à te les ré-afficher. Les lettres types se remplissent dans ta page : ce que tu écris (nom, adresse…) n'est ni envoyé ni enregistré. Tu peux tout effacer dans « Mes démarches », bouton « Tout effacer », ou en vidant les données du site dans ton navigateur.</p>
         </section>
         <section>
           <h2>Les services extérieurs qui peuvent voir ton adresse IP</h2>

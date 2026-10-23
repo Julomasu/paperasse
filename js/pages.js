@@ -48,6 +48,16 @@
     </div>`;
   };
 
+  /* Reprendre là où on s'était arrêté·e : fiches en cours puis dernières ouvertes */
+  P.htmlReprise = function () {
+    const enCours = P.GUIDES.filter(g => { const a = P.avancement(g); return a.fait > 0 && a.fait < a.total; });
+    const vus = (P.etat.recent || []).map(i => P.guideParId[i]).filter(g => g && !enCours.includes(g));
+    const l = enCours.concat(vus).slice(0, 3);
+    if (!l.length) return "";
+    return `<section class="reprise"><div class="titre-section"><h2>Reprendre</h2><a class="lien-fleche" href="#suivi">Mes démarches</a></div>
+      <div class="reprise-liste">${l.map(g => P.carteGuide(g)).join("")}</div></section>`;
+  };
+
   /* ——— Accueil */
   P.pages.accueil = function (el) {
     const nbGuides = compte(P.GUIDES), nbDocs = compte(P.DOCUMENTS), nbLettres = compte(P.LETTRES);
@@ -71,14 +81,23 @@
         </div>
       </div></section>
 
+      ${P.htmlReprise()}
+
       <section>
         <div class="titre-section"><h2>Que t'arrive-t-il ?</h2><a class="lien-fleche" href="#vie">Toutes les situations</a></div>
         <div class="vies">${P.EVENEMENTS.slice(0, 12).map(v => `<a class="vie-carte" href="#vie-${v.id}"><strong>${e(v.nom)}</strong><span>${e(v.accroche)}</span><i aria-hidden="true">→</i></a>`).join("")}</div>
       </section>
 
+      <section class="plein appel appel-etranger"><div class="cadre">
+        <p class="surtitre">Partir à l'étranger</p>
+        <h2>Travailler en Europe, Brexit, PVT, Erasmus…</h2>
+        <p class="chapo">Choisis ta destination : on te donne les papiers, la Sécu, les impôts et les pièges, dans l'ordre.</p>
+        <div class="actions">${(P.DESTINATIONS || []).map(d => `<a class="btn btn-ligne" href="#destination-${d.id}">${e(d.court || d.nom)}</a>`).join("")}</div>
+      </div></section>
+
       <section>
         <div class="titre-section"><h2>Les guides</h2><a class="lien-fleche" href="#guides">Les ${nbGuides} guides</a></div>
-        <div class="tuiles" aria-label="Les huit thèmes">
+        <div class="tuiles" aria-label="Les dix thèmes">
         ${P.THEMES.map(t => `<a class="tuile" href="#theme-${t.id}" style="--c:${t.c}">
           <span class="fond-chiffre" aria-hidden="true">${guidesDuTheme(t.id).length}</span>
           <div><h2>${e(t.nom)}</h2><p>${e(t.desc)}</p></div>
@@ -93,6 +112,7 @@
           <a class="outil-carte" href="#lettres"><strong>Lettres types</strong><span>Préavis, résiliation, contestation… à copier.</span><b>${nbLettres}</b></a>
           <a class="outil-carte" href="#documents"><strong>Où trouver ce papier</strong><span>Acte de naissance, avis d'impôt, attestation de droits…</span><b>${nbDocs}</b></a>
           <a class="outil-carte" href="#contacts"><strong>Qui contacter</strong><span>Le bon organisme pour chaque problème.</span><b>${compte(P.CONTACTS)}</b></a>
+          <a class="outil-carte" href="#destination"><strong>Partir à l'étranger</strong><span>Europe, Brexit, PVT, États-Unis, Canada…</span><b>${compte(P.DESTINATIONS)}</b></a>
           <a class="outil-carte" href="#calendrier"><strong>Calendrier admin</strong><span>Ce qu'il faut faire, mois par mois.</span><b>12</b></a>
           <a class="outil-carte" href="#outils"><strong>Calculs rapides</strong><span>Micro-entreprise, job imposable, stage, préavis.</span><b>4</b></a>
         </div>
@@ -171,6 +191,7 @@
       ${id === "entreprise" ? `<section class="actions"><a class="btn btn-signal" href="#outil-micro">Simuler mes cotisations 2026</a></section>` : ""}
       ${id === "impots" ? `<section class="actions"><a class="btn btn-signal" href="#outil-job">Mon job est-il imposable ?</a></section>` : ""}
       ${id === "travail" ? `<section class="actions"><a class="btn btn-signal" href="#outil-stage">Ma gratification de stage</a></section>` : ""}
+      ${id === "etranger" ? `<section class="actions"><a class="btn btn-signal" href="#destination">Choisir ma destination</a><a class="btn btn-ligne" href="#vie-partir-etranger">Check-list de départ</a></section>` : ""}
       ${id === "logement" ? `<section class="actions"><a class="btn btn-signal" href="#outil-preavis">Calculer mon préavis</a></section>` : ""}`;
   };
 
@@ -182,9 +203,15 @@
     const voir = (g.voir || []).map(i => P.guideParId[i]).filter(Boolean);
     const vies = (P.EVENEMENTS || []).filter(v => v.guides.includes(g.id));
     const lettres = (P.LETTRES || []).filter(l => l.guide === g.id);
+    P.noterVu(g.id);
     const rendreAvancee = () => {
-      const a = P.avancement(g);
-      return `<p><span class="chiffre">${a.fait}/${a.total}</span> <span class="petit">étapes faites</span></p><div class="avancee"><i style="width:${a.pct}%"></i></div>`;
+      const a = P.avancement(g), fini = a.fait === a.total;
+      return `<p><span class="chiffre">${a.fait}/${a.total}</span> <span class="petit">étapes faites</span></p><div class="avancee"><i style="width:${a.pct}%"></i></div>
+        <div class="actions-rapides"><button type="button" class="btn-mini plein-noir" data-prochaine>${fini ? "Tout est fait ✔" : "Étape suivante"}</button><button type="button" class="btn-mini" data-copier-liste>Copier la checklist</button><button type="button" class="btn-mini" data-tout>${fini ? "Tout décocher" : "Tout cocher"}</button></div>`;
+    };
+    const marquerSuivante = () => {
+      const etapes = P.$$(".etape", el); let trouve = false;
+      etapes.forEach((li, i) => { const eux = !P.estFait(g.id, i) && !trouve; if (eux) trouve = true; li.classList.toggle("suivante", eux && P.avancement(g).fait > 0); });
     };
     el.innerHTML = `
       <div class="guide" style="--c:${t.c}">
@@ -221,15 +248,37 @@
           ${/claude\.ai|claudeusercontent/.test(location.hostname) ? "" : `<button type="button" class="btn btn-ligne" data-imprimer>Imprimer cette fiche</button>`}
         </aside>
       </div>`;
-    el.onclick = ev => { if (ev.target.closest("[data-imprimer]")) window.print(); };
+    const toutRedessiner = () => {
+      P.$$(".etape", el).forEach((li, i) => { li.classList.toggle("fait", P.estFait(g.id, i)); const c = P.$(".coche", li); if (c) c.checked = P.estFait(g.id, i); });
+      P.$("#prog", el).innerHTML = rendreAvancee(); marquerSuivante();
+    };
+    el.onclick = ev => {
+      if (ev.target.closest("[data-imprimer]")) { window.print(); return; }
+      if (ev.target.closest("[data-prochaine]")) {
+        const i = g.etapes.findIndex((_, k) => !P.estFait(g.id, k)); if (i < 0) return;
+        const li = P.$("#e-" + i, el); li.scrollIntoView({ behavior: "smooth", block: "center" });
+        li.classList.remove("flash"); void li.offsetWidth; li.classList.add("flash"); return;
+      }
+      if (ev.target.closest("[data-copier-liste]")) {
+        const txt = g.titre + "\n" + g.etapes.map((s2, k) => `${P.estFait(g.id, k) ? "[x]" : "[ ]"} ${k + 1}. ${s2.t}`).join("\n") + "\n\nPaperasse : " + location.href.split("#")[0] + "#guide-" + g.id;
+        P.copier(txt); return;
+      }
+      if (ev.target.closest("[data-tout]")) {
+        const tout = P.avancement(g).fait === g.etapes.length;
+        if (tout) delete P.etat.faits[g.id]; else P.etat.faits[g.id] = g.etapes.map((_, k) => k);
+        P.sauver(); toutRedessiner();
+        if (!tout) P.toast("Bravo, une démarche de moins ✔");
+      }
+    };
     el.onchange = ev => {
       const c = ev.target.closest(".coche"); if (!c) return;
       const i = Number(c.dataset.i);
       P.basculer(g.id, i);
       c.closest(".etape").classList.toggle("fait", P.estFait(g.id, i));
-      P.$("#prog", el).innerHTML = rendreAvancee();
+      P.$("#prog", el).innerHTML = rendreAvancee(); marquerSuivante();
       if (P.avancement(g).fait === g.etapes.length) P.toast("Bravo, une démarche de moins ✔");
     };
+    marquerSuivante();
   };
 
   /* ——— Suivi */
